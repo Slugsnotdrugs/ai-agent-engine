@@ -1,0 +1,22 @@
+{
+  "id": "prompt-extract-client-risks-v1",
+  "type": "prompt",
+  "category": "prompts",
+  "subcategory": "extraction",
+  "name": "Extract Client Risks",
+  "version": "1.0.0",
+  "purpose": "Extract risks from client data.",
+  "inputs": [
+    "source_text",
+    "business_context",
+    "risk_focus"
+  ],
+  "output_format": "json",
+  "tags": [
+    "extraction",
+    "risk",
+    "client",
+    "json"
+  ],
+  "status": "draft"
+}

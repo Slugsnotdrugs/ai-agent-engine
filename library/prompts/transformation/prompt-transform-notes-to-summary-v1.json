@@ -1,0 +1,23 @@
+{
+  "id": "prompt-transform-notes-to-summary-v1",
+  "type": "prompt",
+  "category": "prompts",
+  "subcategory": "transformation",
+  "name": "Transform Notes to Summary",
+  "version": "1.0.0",
+  "purpose": "Convert raw notes into a clean structured summary.",
+  "inputs": [
+    "raw_notes",
+    "target_audience",
+    "tone",
+    "length_preference"
+  ],
+  "output_format": "structured_summary",
+  "tags": [
+    "transformation",
+    "summary",
+    "notes",
+    "cleanup"
+  ],
+  "status": "draft"
+}

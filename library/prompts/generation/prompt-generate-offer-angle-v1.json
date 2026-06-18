@@ -1,0 +1,13 @@
+{
+  "id": "prompt-generate-offer-angle-v1",
+  "type": "prompt",
+  "category": "prompts",
+  "subcategory": "generation",
+  "name": "Generate Offer Angle",
+  "version": "1.0.0",
+  "purpose": "Generate positioning angles, offer concepts, or messaging directions from a business input and audience profile.",
+  "inputs": ["business_summary", "audience_profile", "goal", "constraints"],
+  "output_format": "structured_ideas",
+  "tags": ["generation", "offer", "messaging", "marketing"],
+  "status": "draft"
+}
