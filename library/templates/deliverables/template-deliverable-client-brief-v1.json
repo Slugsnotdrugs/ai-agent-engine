@@ -1,0 +1,22 @@
+{
+  "id": "template-deliverable-client-brief-v1",
+  "type": "template",
+  "category": "templates",
+  "subcategory": "deliverables",
+  "name": "Client Brief Template",
+  "version": "1.0.0",
+  "purpose": "Reusable client-facing brief structure.",
+  "fields": {
+    "title": "string",
+    "executive_summary": "string",
+    "key_findings": "array",
+    "recommendations": "array",
+    "next_steps": "array"
+  },
+  "tags": [
+    "deliverable",
+    "brief",
+    "client"
+  ],
+  "status": "draft"
+}
