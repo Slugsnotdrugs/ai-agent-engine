@@ -39,5 +39,19 @@ def builder():
     db.close()
     return render_template("agent_builder.html", prompts=prompts, workflows=workflows, success=success, error=error)
 
+@app.route("/library")
+def library():
+    db = SessionLocal()
+    lib = library_summary()
+    assets = {
+        "prompts": list_assets("prompts"),
+        "templates": list_assets("templates"),
+        "workflows": list_assets("workflows"),
+        "agents": list_assets("agents"),
+        "use-cases": list_assets("use-cases"),
+    }
+    db.close()
+    return render_template("library.html", library=lib, assets=assets)
+
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8000)
