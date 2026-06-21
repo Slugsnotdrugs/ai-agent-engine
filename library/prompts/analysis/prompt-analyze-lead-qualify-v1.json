@@ -1,0 +1,13 @@
+{
+  "id": "prompt-analyze-lead-qualify-v1",
+  "type": "prompt",
+  "category": "prompts",
+  "subcategory": "analysis",
+  "name": "Lead Qualifier",
+  "version": "1.0.0",
+  "purpose": "Analyze a business lead and produce a qualification score and summary. You receive a company name, contact details, industry, and any available context. Evaluate the lead against ideal customer profile criteria: company size fit, industry relevance, budget signals, urgency indicators, and decision-maker access. Return a score from 0–100, a tier label (Hot / Warm / Cold), and 3–5 bullet points explaining the score with specific evidence from the input.",
+  "inputs": ["company_name", "contact_name", "industry", "company_size", "context"],
+  "output_format": "score_and_summary",
+  "tags": ["analysis", "lead", "qualification", "scoring", "b2b"],
+  "status": "active"
+}
