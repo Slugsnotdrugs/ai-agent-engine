@@ -1,10 +1,12 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from core.database import init_db, SessionLocal
-from core.bones import get_system_metrics, list_agents, create_agent, update_agent_status
+from core.bones import get_system_metrics, list_agents, create_agent, update_agent_status, get_agent
 from core.library import library_summary, list_assets
+from core.executor import execute
 
 app = Flask(__name__)
 init_db()
+
 
 @app.route("/")
 def dashboard():
@@ -14,6 +16,7 @@ def dashboard():
     lib = library_summary()
     db.close()
     return render_template("dashboard.html", metrics=metrics, agents=agents, library=lib)
+
 
 @app.route("/builder", methods=["GET", "POST"])
 def builder():
@@ -30,7 +33,13 @@ def builder():
             prompt_parts = request.form["prompt_id"].split("|")
             workflow_parts = request.form["workflow_id"].split("|")
             provider = request.form["provider"]
-            config = {"prompt_id": prompt_parts[0], "prompt_subcategory": prompt_parts[1], "workflow_id": workflow_parts[0], "workflow_subcategory": workflow_parts[1], "provider": provider}
+            config = {
+                "prompt_id": prompt_parts[0],
+                "prompt_subcategory": prompt_parts[1],
+                "workflow_id": workflow_parts[0],
+                "workflow_subcategory": workflow_parts[1],
+                "provider": provider,
+            }
             agent_id = create_agent(db, name, agent_type, guts_id, config)
             update_agent_status(db, agent_id, "ACTIVE")
             success = agent_id
@@ -38,6 +47,7 @@ def builder():
             error = str(e)
     db.close()
     return render_template("agent_builder.html", prompts=prompts, workflows=workflows, success=success, error=error)
+
 
 @app.route("/library")
 def library():
@@ -52,6 +62,104 @@ def library():
     }
     db.close()
     return render_template("library.html", library=lib, assets=assets)
+
+
+@app.route("/run", methods=["GET", "POST"])
+def run():
+    """
+    GET  — render the run form (lists all ACTIVE agents to pick from)
+    POST — execute the selected agent and display the result
+    """
+    db = SessionLocal()
+    agents = [a for a in list_agents(db) if a.status == "ACTIVE"]
+    result = None
+    error = None
+
+    if request.method == "POST":
+        agent_id = request.form.get("agent_id")
+        user_input = request.form.get("user_input", "").strip()
+
+        if not agent_id or not user_input:
+            error = "Both agent and input are required."
+        else:
+            agent = get_agent(db, agent_id)
+            if not agent:
+                error = f"Agent {agent_id} not found."
+            else:
+                try:
+                    cfg = agent.config
+                    res = execute(
+                        db=db,
+                        agent_id=agent_id,
+                        prompt_id=cfg["prompt_id"],
+                        prompt_subcategory=cfg["prompt_subcategory"],
+                        workflow_id=cfg["workflow_id"],
+                        workflow_subcategory=cfg["workflow_subcategory"],
+                        user_input=user_input,
+                    )
+                    result = {
+                        "agent_id":      res.agent_id,
+                        "prompt_used":   res.prompt_used,
+                        "workflow_used": res.workflow_used,
+                        "masked_input":  res.masked_input,
+                        "final_output":  res.final_output,
+                        "elapsed":       f"{res.elapsed_seconds:.2f}s",
+                        "entities":      res.entity_count,
+                    }
+                except Exception as e:
+                    error = str(e)
+
+    db.close()
+    return render_template("run.html", agents=agents, result=result, error=error)
+
+
+@app.route("/api/run", methods=["POST"])
+def api_run():
+    """
+    JSON API endpoint — same execution pipeline, returns JSON instead of HTML.
+    Useful for testing via curl or integrating with other tools later.
+
+    Body: { "agent_id": "...", "user_input": "..." }
+    """
+    data = request.get_json(force=True)
+    agent_id = data.get("agent_id")
+    user_input = data.get("user_input", "").strip()
+
+    if not agent_id or not user_input:
+        return jsonify({"error": "agent_id and user_input are required"}), 400
+
+    db = SessionLocal()
+    try:
+        agent = get_agent(db, agent_id)
+        if not agent:
+            return jsonify({"error": f"Agent {agent_id} not found"}), 404
+        if agent.status != "ACTIVE":
+            return jsonify({"error": f"Agent {agent_id} is not ACTIVE (status: {agent.status})"}), 400
+
+        cfg = agent.config
+        res = execute(
+            db=db,
+            agent_id=agent_id,
+            prompt_id=cfg["prompt_id"],
+            prompt_subcategory=cfg["prompt_subcategory"],
+            workflow_id=cfg["workflow_id"],
+            workflow_subcategory=cfg["workflow_subcategory"],
+            user_input=user_input,
+        )
+        return jsonify({
+            "agent_id":      res.agent_id,
+            "prompt_used":   res.prompt_used,
+            "workflow_used": res.workflow_used,
+            "masked_input":  res.masked_input,
+            "final_output":  res.final_output,
+            "elapsed_seconds": res.elapsed_seconds,
+            "entity_count":  res.entity_count,
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        db.close()
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8000)
