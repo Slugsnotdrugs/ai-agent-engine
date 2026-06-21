@@ -5,8 +5,8 @@
   "subcategory": "routing",
   "name": "Task Dispatch Workflow",
   "version": "1.0.0",
-  "purpose": "Classify an incoming request and route it to the correct agent, prompt family, and output template.",
-  "steps": ["ingest_request", "classify_request", "select_agent", "select_prompt", "select_template", "dispatch"],
-  "tags": ["routing", "dispatch", "orchestration"],
-  "status": "draft"
+  "purpose": "Classify an incoming request and route it to the correct agent, prompt family, and output template. Reads the user input, determines task type (generation, analysis, extraction, transformation, or evaluation), and dispatches to the appropriate handler. Returns a structured response with the task classification and output.",
+  "steps": ["ingest_request", "classify_request", "select_agent", "select_prompt", "select_template", "dispatch", "return_output"],
+  "tags": ["routing", "dispatch", "orchestration", "classification"],
+  "status": "active"
 }
