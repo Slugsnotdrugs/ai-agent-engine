@@ -5,9 +5,9 @@
   "subcategory": "generation",
   "name": "Generate Offer Angle",
   "version": "1.0.0",
-  "purpose": "Generate positioning angles, offer concepts, or messaging directions from a business input and audience profile.",
+  "purpose": "Generate compelling positioning angles, offer concepts, and messaging directions from a business summary and audience profile. You help craft persuasive, benefit-driven copy that connects a product or service to the target customer's core desires and pain points. Return 3–5 distinct angles with a headline and supporting rationale for each.",
   "inputs": ["business_summary", "audience_profile", "goal", "constraints"],
   "output_format": "structured_ideas",
-  "tags": ["generation", "offer", "messaging", "marketing"],
-  "status": "draft"
+  "tags": ["generation", "offer", "messaging", "marketing", "copywriting"],
+  "status": "active"
 }
