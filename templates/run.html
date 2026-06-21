@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Run Agent — AI Agent Engine</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    nav {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #2d3748;
+    }
+    nav a {
+      color: #63b3ed;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    nav a:hover { text-decoration: underline; }
+
+    h1 { font-size: 1.6rem; margin-bottom: 0.4rem; }
+    .subtitle { color: #718096; font-size: 0.9rem; margin-bottom: 2rem; }
+
+    .card {
+      background: #1a202c;
+      border: 1px solid #2d3748;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .card h2 { font-size: 1rem; margin-bottom: 1rem; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    label { display: block; font-size: 0.85rem; color: #a0aec0; margin-bottom: 0.4rem; }
+
+    select, textarea {
+      width: 100%;
+      background: #0f1117;
+      border: 1px solid #2d3748;
+      border-radius: 6px;
+      color: #e2e8f0;
+      padding: 0.6rem 0.75rem;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    select:focus, textarea:focus {
+      outline: none;
+      border-color: #63b3ed;
+    }
+    textarea { resize: vertical; min-height: 120px; font-family: inherit; }
+
+    .btn {
+      background: #3182ce;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 0.65rem 1.4rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn:hover { background: #2b6cb0; }
+    .btn:disabled { background: #2d3748; color: #718096; cursor: not-allowed; }
+
+    .no-agents {
+      color: #fc8181;
+      font-size: 0.9rem;
+      padding: 0.75rem;
+      background: #2d1515;
+      border: 1px solid #fc8181;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+    }
+
+    .alert-error {
+      color: #fc8181;
+      background: #2d1515;
+      border: 1px solid #fc8181;
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    /* ── Result card ── */
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    @media (max-width: 640px) { .result-grid { grid-template-columns: 1fr; } }
+
+    .meta-item { }
+    .meta-label { font-size: 0.75rem; color: #718096; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.2rem; }
+    .meta-value { font-size: 0.9rem; color: #e2e8f0; }
+
+    .badge {
+      display: inline-block;
+      background: #2b4c7e;
+      color: #63b3ed;
+      border-radius: 4px;
+      padding: 0.1rem 0.5rem;
+      font-size: 0.8rem;
+      font-family: monospace;
+    }
+
+    .output-box {
+      background: #0f1117;
+      border: 1px solid #2d3748;
+      border-radius: 6px;
+      padding: 1rem;
+      white-space: pre-wrap;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #e2e8f0;
+      margin-top: 0.5rem;
+    }
+
+    .masked-box {
+      background: #0f1117;
+      border: 1px solid #744210;
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      white-space: pre-wrap;
+      font-size: 0.8rem;
+      color: #d69e2e;
+      margin-top: 0.5rem;
+    }
+
+    details summary {
+      cursor: pointer;
+      color: #718096;
+      font-size: 0.8rem;
+      padding: 0.3rem 0;
+    }
+    details summary:hover { color: #a0aec0; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/">Dashboard</a>
+    <a href="/builder">Builder</a>
+    <a href="/library">Library</a>
+    <a href="/run">Run</a>
+  </nav>
+
+  <h1>Run Agent</h1>
+  <p class="subtitle">Select an active agent, provide input, and execute the pipeline end-to-end.</p>
+
+  {% if error %}
+  <div class="alert-error">{{ error }}</div>
+  {% endif %}
+
+  <!-- ── Run form ── -->
+  <div class="card">
+    <h2>Execute</h2>
+
+    {% if agents %}
+    <form method="POST" action="/run">
+      <label for="agent_id">Agent</label>
+      <select name="agent_id" id="agent_id" required>
+        <option value="" disabled selected>— select an agent —</option>
+        {% for agent in agents %}
+        <option value="{{ agent.id }}"
+          {% if result and result.agent_id == agent.id %}selected{% endif %}>
+          {{ agent.name }} &nbsp;·&nbsp; {{ agent.type }} &nbsp;·&nbsp;
+          <span style="font-family:monospace;font-size:0.8em;">{{ agent.id }}</span>
+        </option>
+        {% endfor %}
+      </select>
+
+      <label for="user_input">Input</label>
+      <textarea name="user_input" id="user_input" placeholder="Type the input you want the agent to process..."
+        required>{% if result %}{{ request.form.get('user_input', '') }}{% endif %}</textarea>
+
+      <button type="submit" class="btn">Run Agent</button>
+    </form>
+
+    {% else %}
+    <div class="no-agents">
+      No ACTIVE agents found. Go to <a href="/builder" style="color:#f6ad55;">Builder</a> to create and activate one first.
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- ── Result ── -->
+  {% if result %}
+  <div class="card">
+    <h2>Result</h2>
+
+    <div class="result-grid">
+      <div class="meta-item">
+        <div class="meta-label">Agent ID</div>
+        <div class="meta-value"><span class="badge">{{ result.agent_id }}</span></div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Elapsed</div>
+        <div class="meta-value">{{ result.elapsed }}</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Prompt Used</div>
+        <div class="meta-value">{{ result.prompt_used }}</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Workflow Used</div>
+        <div class="meta-value">{{ result.workflow_used }}</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">PII Entities Masked</div>
+        <div class="meta-value">{{ result.entities }}</div>
+      </div>
+    </div>
+
+    <label>Output</label>
+    <div class="output-box">{{ result.final_output }}</div>
+
+    {% if result.entities > 0 %}
+    <details style="margin-top:1rem;">
+      <summary>Show masked input ({{ result.entities }} entities redacted)</summary>
+      <div class="masked-box">{{ result.masked_input }}</div>
+    </details>
+    {% endif %}
+  </div>
+  {% endif %}
+
+</body>
+</html>
