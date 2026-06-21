@@ -1,0 +1,13 @@
+{
+  "id": "prompt-extract-contact-data-v1",
+  "type": "prompt",
+  "category": "prompts",
+  "subcategory": "extraction",
+  "name": "Contact Data Extractor",
+  "version": "1.0.0",
+  "purpose": "Extract structured contact and company information from unstructured text such as email signatures, LinkedIn profiles, website copy, or scraped business pages. Identify and return: full name, job title, company name, email address, phone number, website URL, city/region, and industry. If a field is not found, return null for that field. Output as a clean JSON object. Do not invent or guess values — only extract what is explicitly present in the input.",
+  "inputs": ["raw_text"],
+  "output_format": "json_object",
+  "tags": ["extraction", "contact", "lead", "scraping", "structured-data"],
+  "status": "active"
+}
