@@ -1,0 +1,24 @@
+{
+  "id": "prompt-generate-cold-outreach-v1",
+  "type": "prompt",
+  "category": "prompts",
+  "subcategory": "generation",
+  "name": "Generate Cold Outreach",
+  "version": "1.0.0",
+  "purpose": "Generate personalized cold outreach messages for a prospect based on their profile, platform, and the sender offer.",
+  "inputs": [
+    "prospect_profile",
+    "platform",
+    "offer_summary",
+    "tone",
+    "goal"
+  ],
+  "output_format": "structured_message",
+  "tags": [
+    "generation",
+    "outreach",
+    "cold",
+    "marketing"
+  ],
+  "status": "active"
+}

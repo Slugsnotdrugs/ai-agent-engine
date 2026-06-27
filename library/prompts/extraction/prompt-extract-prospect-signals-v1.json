@@ -1,0 +1,22 @@
+{
+  "id": "prompt-extract-prospect-signals-v1",
+  "type": "prompt",
+  "category": "prompts",
+  "subcategory": "extraction",
+  "name": "Extract Prospect Signals",
+  "version": "1.0.0",
+  "purpose": "Extract buying signals, pain points, and intent indicators from prospect content such as posts, bios, or comments.",
+  "inputs": [
+    "raw_content",
+    "platform",
+    "offer_context"
+  ],
+  "output_format": "signal_report",
+  "tags": [
+    "extraction",
+    "prospects",
+    "signals",
+    "marketing"
+  ],
+  "status": "active"
+}
