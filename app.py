@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from core.database import init_db, SessionLocal
 from core.bones import get_system_metrics, list_agents, create_agent, update_agent_status
 from core.library import library_summary, list_assets
+from core.chainer import Chainer
 
 app = Flask(__name__)
 init_db()
@@ -39,33 +40,16 @@ def builder():
     db.close()
     return render_template("agent_builder.html", prompts=prompts, workflows=workflows, success=success, error=error)
 
-@app.route("/library")
-def library():
-    db = SessionLocal()
-    lib = library_summary()
-    assets = {
-        "prompts": list_assets("prompts"),
-        "templates": list_assets("templates"),
-        "workflows": list_assets("workflows"),
-        "agents": list_assets("agents"),
-        "use-cases": list_assets("use-cases"),
-    }
-    db.close()
-    return render_template("library.html", library=lib, assets=assets)
-@app.route('/run', methods=['GET', 'POST'])
+@app.route("/run", methods=["GET", "POST"])
 def run():
-    from core.bones import get_agent
     from core.executor import execute
-    
     db = SessionLocal()
-    agents = [a for a in list_agents(db) if a.status == 'ACTIVE']
+    agents = list_agents(db)
     result = None
     error = None
-    
     if request.method == 'POST':
         agent_id = request.form.get('agent_id')
         user_input = request.form.get('user_input', '').strip()
-        
         if not agent_id or not user_input:
             error = 'Both agent and input are required.'
         else:
@@ -95,8 +79,41 @@ def run():
                     }
                 except Exception as e:
                     error = str(e)
-                    
     db.close()
     return render_template('run.html', agents=agents, result=result, error=error)
+
+@app.route("/marketing", methods=["GET", "POST"])
+def marketing():
+    result = None
+    error = None
+    if request.method == "POST":
+        user_input = request.form.get("user_input", "").strip()
+        if not user_input:
+            error = "Input is required."
+        else:
+            try:
+                steps = [
+                    {
+                        "agent_id": "agent_2ae5c062a770",
+                        "prompt_id": "prompt-extract-prospect-signals-v1",
+                        "prompt_subcategory": "extraction",
+                        "workflow_id": "workflow-routing-task-dispatch-v1",
+                        "workflow_subcategory": "routing"
+                    },
+                    {
+                        "agent_id": "agent_5c0d10069147",
+                        "prompt_id": "prompt-generate-cold-outreach-v1",
+                        "prompt_subcategory": "generation",
+                        "workflow_id": "workflow-routing-task-dispatch-v1",
+                        "workflow_subcategory": "routing"
+                    }
+                ]
+                chainer = Chainer()
+                result = chainer.run_chain(steps, initial_input=user_input)
+                chainer.close()
+            except Exception as e:
+                error = str(e)
+    return render_template("marketing.html", result=result, error=error)
+
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=8000)

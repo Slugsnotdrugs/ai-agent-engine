@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Marketing Pipeline</title>
+    <style>
+        body { font-family: monospace; background: #0a0a0a; color: #00ff00; padding: 40px; max-width: 900px; margin: 0 auto; }
+        h1 { color: #00ff00; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        textarea { width: 100%; height: 120px; background: #111; color: #00ff00; border: 1px solid #333; padding: 10px; font-family: monospace; font-size: 14px; }
+        button { background: #00ff00; color: #000; border: none; padding: 10px 30px; font-size: 16px; cursor: pointer; margin-top: 10px; font-weight: bold; }
+        .result { margin-top: 30px; }
+        .step { background: #111; border: 1px solid #333; padding: 20px; margin-bottom: 20px; }
+        .step h3 { color: #00ff00; margin-top: 0; }
+        .output { white-space: pre-wrap; color: #ccc; }
+        .error { color: #ff4444; background: #1a0000; padding: 15px; border: 1px solid #ff4444; }
+        nav a { color: #00ff00; margin-right: 20px; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <nav><a href="/">Dashboard</a><a href="/builder">Builder</a><a href="/run">Run</a><a href="/marketing">Marketing</a></nav>
+    <h1>Marketing Pipeline</h1>
+    <p>Describe your target audience and platform. The pipeline will extract prospect signals and generate cold outreach.</p>
+    <form method="POST">
+        <textarea name="user_input" placeholder="Example: Target audience: indie founders building SaaS tools. Platform: Reddit. Looking for people struggling with marketing automation."></textarea>
+        <br>
+        <button type="submit">Run Pipeline</button>
+    </form>
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+    {% if result %}
+    <div class="result">
+        <h2>Pipeline Results ({{ result.steps_completed }} steps completed)</h2>
+        {% for r in result.results %}
+        <div class="step">
+            <h3>Step {{ r.step }} - {{ r.agent_id }}</h3>
+            {% if r.output %}
+            <div class="output">{{ r.output }}</div>
+            {% else %}
+            <div class="error">{{ r.error }}</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</body>
+</html>
