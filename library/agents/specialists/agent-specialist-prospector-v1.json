@@ -1,0 +1,27 @@
+{
+  "id": "agent-specialist-prospector-v1",
+  "type": "agent",
+  "category": "agents",
+  "subcategory": "specialists",
+  "name": "Prospector Agent",
+  "version": "1.0.0",
+  "purpose": "Find and qualify potential leads from a given platform or data source based on an offer and audience profile.",
+  "inputs": [
+    "platform",
+    "audience_profile",
+    "offer_summary",
+    "search_criteria"
+  ],
+  "output_format": "prospect_list",
+  "uses_prompts": [
+    "prompt-extract-prospect-signals-v1",
+    "prompt-analyze-lead-quality-v1"
+  ],
+  "tags": [
+    "agent",
+    "prospecting",
+    "leads",
+    "marketing"
+  ],
+  "status": "active"
+}

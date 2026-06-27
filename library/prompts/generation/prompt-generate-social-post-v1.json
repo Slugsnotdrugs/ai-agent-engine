@@ -1,0 +1,24 @@
+{
+  "id": "prompt-generate-social-post-v1",
+  "type": "prompt",
+  "category": "prompts",
+  "subcategory": "generation",
+  "name": "Generate Social Post",
+  "version": "1.0.0",
+  "purpose": "Generate platform-specific social media posts to attract leads or build audience around a product or service.",
+  "inputs": [
+    "topic",
+    "platform",
+    "audience",
+    "tone",
+    "cta"
+  ],
+  "output_format": "structured_post",
+  "tags": [
+    "generation",
+    "social",
+    "content",
+    "marketing"
+  ],
+  "status": "active"
+}

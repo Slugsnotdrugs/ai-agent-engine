@@ -1,0 +1,22 @@
+{
+  "id": "prompt-analyze-lead-quality-v1",
+  "type": "prompt",
+  "category": "prompts",
+  "subcategory": "analysis",
+  "name": "Analyze Lead Quality",
+  "version": "1.0.0",
+  "purpose": "Score and qualify a prospect based on their profile, behavior signals, and fit with the offer.",
+  "inputs": [
+    "prospect_profile",
+    "offer_summary",
+    "scoring_criteria"
+  ],
+  "output_format": "scored_profile",
+  "tags": [
+    "analysis",
+    "leads",
+    "qualification",
+    "marketing"
+  ],
+  "status": "active"
+}

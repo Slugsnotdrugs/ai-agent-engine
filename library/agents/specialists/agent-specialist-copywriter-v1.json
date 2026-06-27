@@ -1,0 +1,29 @@
+{
+  "id": "agent-specialist-copywriter-v1",
+  "type": "agent",
+  "category": "agents",
+  "subcategory": "specialists",
+  "name": "Copywriter Agent",
+  "version": "1.0.0",
+  "purpose": "Generate targeted marketing copy including hooks, posts, and outreach messages for a qualified prospect.",
+  "inputs": [
+    "prospect_profile",
+    "offer_summary",
+    "platform",
+    "goal",
+    "tone"
+  ],
+  "output_format": "copy_package",
+  "uses_prompts": [
+    "prompt-generate-hook-v1",
+    "prompt-generate-cold-outreach-v1",
+    "prompt-generate-social-post-v1"
+  ],
+  "tags": [
+    "agent",
+    "copywriting",
+    "content",
+    "marketing"
+  ],
+  "status": "active"
+}

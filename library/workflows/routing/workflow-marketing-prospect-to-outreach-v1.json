@@ -1,0 +1,37 @@
+{
+  "id": "workflow-marketing-prospect-to-outreach-v1",
+  "type": "workflow",
+  "category": "workflows",
+  "subcategory": "routing",
+  "name": "Prospect to Outreach Workflow",
+  "version": "1.0.0",
+  "purpose": "Full marketing pipeline from prospect discovery to personalized outreach.",
+  "steps": [
+    {
+      "step": 1,
+      "agent": "agent-specialist-prospector-v1",
+      "output_passes_to": "step_2"
+    },
+    {
+      "step": 2,
+      "agent": "agent-specialist-copywriter-v1",
+      "output_passes_to": "final_output"
+    }
+  ],
+  "inputs": [
+    "platform",
+    "audience_profile",
+    "offer_summary",
+    "search_criteria",
+    "tone",
+    "goal"
+  ],
+  "output_format": "outreach_package",
+  "tags": [
+    "workflow",
+    "marketing",
+    "prospecting",
+    "outreach"
+  ],
+  "status": "active"
+}

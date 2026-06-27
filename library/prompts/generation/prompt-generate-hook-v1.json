@@ -1,0 +1,23 @@
+{
+  "id": "prompt-generate-hook-v1",
+  "type": "prompt",
+  "category": "prompts",
+  "subcategory": "generation",
+  "name": "Generate Hook",
+  "version": "1.0.0",
+  "purpose": "Generate attention-grabbing hooks for posts, emails, or ads based on an offer and target audience.",
+  "inputs": [
+    "offer_summary",
+    "audience",
+    "platform",
+    "emotion_target"
+  ],
+  "output_format": "hook_variants",
+  "tags": [
+    "generation",
+    "hook",
+    "copywriting",
+    "marketing"
+  ],
+  "status": "active"
+}
