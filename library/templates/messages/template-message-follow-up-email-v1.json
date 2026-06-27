@@ -1,0 +1,23 @@
+{
+  "id": "template-message-follow-up-email-v1",
+  "type": "template",
+  "category": "templates",
+  "subcategory": "messages",
+  "name": "Follow-Up Email Template",
+  "version": "1.0.0",
+  "purpose": "Reusable follow-up email structure.",
+  "fields": {
+    "subject": "string",
+    "opening": "string",
+    "context": "string",
+    "value_statement": "string",
+    "cta": "string",
+    "signoff": "string"
+  },
+  "tags": [
+    "message",
+    "email",
+    "follow-up"
+  ],
+  "status": "draft"
+}

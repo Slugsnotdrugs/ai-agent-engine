@@ -1,0 +1,22 @@
+{
+  "id": "template-portal-findings-card-v1",
+  "type": "template",
+  "category": "templates",
+  "subcategory": "portal",
+  "name": "Portal Findings Card",
+  "version": "1.0.0",
+  "purpose": "Portal display block for findings.",
+  "fields": {
+    "headline": "string",
+    "description": "string",
+    "severity": "string",
+    "status": "string",
+    "recommended_action": "string"
+  },
+  "tags": [
+    "portal",
+    "ui",
+    "findings"
+  ],
+  "status": "draft"
+}

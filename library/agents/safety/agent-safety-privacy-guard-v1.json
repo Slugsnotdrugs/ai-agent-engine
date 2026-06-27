@@ -1,0 +1,14 @@
+{
+  "id": "agent-safety-privacy-guard-v1",
+  "type": "agent",
+  "category": "agents",
+  "subcategory": "safety",
+  "name": "Privacy Guard",
+  "version": "1.0.0",
+  "role": "Review content for privacy, safety, and data-handling concerns before downstream use or client delivery.",
+  "allowed_workflows": ["workflow-routing-task-dispatch-v1", "workflow-review-draft-qa-v1"],
+  "allowed_prompt_categories": ["evaluation", "extraction"],
+  "handoff_targets": ["reviewers", "orchestrators", "portal"],
+  "tags": ["privacy", "safety", "guardrails", "compliance"],
+  "status": "draft"
+}

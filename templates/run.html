@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Run Agent</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,sans-serif;background:#0f1117;color:#e2e8f0;padding:2rem}
+nav{display:flex;gap:1.5rem;margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid #2d3748}
+nav a{color:#63b3ed;text-decoration:none}
+h1{font-size:1.6rem;margin-bottom:.4rem}.subtitle{color:#718096;font-size:.9rem;margin-bottom:2rem}
+.card{background:#1a202c;border:1px solid #2d3748;border-radius:8px;padding:1.5rem;margin-bottom:1.5rem}
+.card h2{font-size:1rem;margin-bottom:1rem;color:#a0aec0;text-transform:uppercase;letter-spacing:.05em}
+label{display:block;font-size:.85rem;color:#a0aec0;margin-bottom:.4rem}
+select,textarea{width:100%;background:#0f1117;border:1px solid #2d3748;border-radius:6px;color:#e2e8f0;padding:.6rem .75rem;font-size:.9rem;margin-bottom:1rem}
+textarea{resize:vertical;min-height:120px;font-family:inherit}
+.btn{background:#3182ce;color:#fff;border:none;border-radius:6px;padding:.65rem 1.4rem;font-size:.9rem;cursor:pointer}
+.btn:hover{background:#2b6cb0}
+.alert-error{color:#fc8181;background:#2d1515;border:1px solid #fc8181;border-radius:6px;padding:.75rem 1rem;margin-bottom:1.5rem}
+.no-agents{color:#fc8181;background:#2d1515;border:1px solid #fc8181;border-radius:6px;padding:.75rem;margin-bottom:1rem}
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.meta-label{font-size:.75rem;color:#718096;text-transform:uppercase;margin-bottom:.2rem}
+.meta-value{font-size:.9rem}
+.badge{background:#2b4c7e;color:#63b3ed;border-radius:4px;padding:.1rem .5rem;font-size:.8rem;font-family:monospace}
+.output-box{background:#0f1117;border:1px solid #2d3748;border-radius:6px;padding:1rem;white-space:pre-wrap;font-size:.9rem;line-height:1.6;margin-top:.5rem}
+.masked-box{background:#0f1117;border:1px solid #744210;border-radius:6px;padding:.75rem 1rem;white-space:pre-wrap;font-size:.8rem;color:#d69e2e;margin-top:.5rem}
+details summary{cursor:pointer;color:#718096;font-size:.8rem;padding:.3rem 0}
+</style></head>
+<body>
+<nav><a href="/">Dashboard</a><a href="/builder">Builder</a><a href="/library">Library</a><a href="/run">Run</a></nav>
+<h1>Run Agent</h1>
+<p class="subtitle">Select an active agent, provide input, and execute the pipeline.</p>
+{% if error %}<div class="alert-error">{{ error }}</div>{% endif %}
+<div class="card"><h2>Execute</h2>
+{% if agents %}
+<form method="POST" action="/run">
+abel for="agent_id">Agent</label>
+<select name="agent_id" id="agent_id" required>
+<option value="" disabled selected>— select an agent —</option>
+{% for agent in agents %}
+<option value="{{ agent.id }}" {% if result and result.agent_id == agent.id %}selected{% endif %}>{{ agent.name }} · {{ agent.type }}</option>
+{% endfor %}
+</select>
+abel for="user_input">Input</label>
+<textarea name="user_input" id="user_input" placeholder="Type the input for the agent..." required></textarea>
+<button type="submit" class="btn">Run Agent</button>
+</form>
+{% else %}
+<div class="no-agents">No ACTIVE agents found. Go to <a href="/builder" style="color:#f6ad55">Builder</a> to create one first.</div>
+{% endif %}
+</div>
+{% if result %}
+<div class="card"><h2>Result</h2>
+<div class="result-grid">
+<div><div class="meta-label">Agent ID</div><div class="meta-value"><span class="badge">{{ result.agent_id }}</span></div></div>
+<div><div class="meta-label">Elapsed</div><div class="meta-value">{{ result.elapsed }}</div></div>
+<div><div class="meta-label">Prompt Used</div><div class="meta-value">{{ result.prompt_used }}</div></div>
+<div><div class="meta-label">PII Entities Masked</div><div class="meta-value">{{ result.entities }}</div></div>
+</div>
+abel>Output</label>
+<div class="output-box">{{ result.final_output }}</div>
+{% if result.entities > 0 %}
+<details style="margin-top:1rem">
+<summary>Show masked input ({{ result.entities }} entities redacted)</summary>
+<div class="masked-box">{{ result.masked_input }}</div>
+</details>{% endif %}
+</div>{% endif %}
+</body></html>

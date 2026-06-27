@@ -1,0 +1,35 @@
+{
+  "id": "use-case-client-delivery-summary-report-v1",
+  "type": "use-case",
+  "category": "use-cases",
+  "subcategory": "client-delivery",
+  "name": "Client Delivery Summary Report",
+  "version": "1.0.0",
+  "purpose": "Bundle prompts, templates, workflows, and agents into a client-safe summary report flow.",
+  "components": {
+    "prompts": [
+      "prompt-transform-notes-to-summary-v1",
+      "prompt-evaluate-output-quality-v1"
+    ],
+    "templates": [
+      "template-deliverable-client-brief-v1",
+      "template-portal-findings-card-v1"
+    ],
+    "workflows": [
+      "workflow-linear-client-intake-v1",
+      "workflow-review-draft-qa-v1"
+    ],
+    "agents": [
+      "agent-orchestrator-master-router-v1",
+      "agent-reviewer-output-critic-v1",
+      "agent-safety-privacy-guard-v1"
+    ]
+  },
+  "tags": [
+    "client-delivery",
+    "summary",
+    "report",
+    "portal"
+  ],
+  "status": "draft"
+}

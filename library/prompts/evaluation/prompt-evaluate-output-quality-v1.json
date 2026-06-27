@@ -1,0 +1,13 @@
+{
+  "id": "prompt-evaluate-output-quality-v1",
+  "type": "prompt",
+  "category": "prompts",
+  "subcategory": "evaluation",
+  "name": "Evaluate Output Quality",
+  "version": "1.0.0",
+  "purpose": "Assess an output for clarity, completeness, structure, usefulness, and readiness for downstream use.",
+  "inputs": ["content", "quality_criteria", "target_use"],
+  "output_format": "quality_review",
+  "tags": ["evaluation", "quality", "review", "qa"],
+  "status": "draft"
+}

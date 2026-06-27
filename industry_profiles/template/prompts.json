@@ -1,0 +1,112 @@
+{
+  "_comment": [
+    "industry_profiles/template/prompts.json",
+    "─────────────────────────────────────────────────────────────────────",
+    "Promptless configuration file for the hybrid-privacy AI agent engine.",
+    "",
+    "Each profile key maps to one deployable business use-case.",
+    "The orchestrator selects a profile at runtime — no code change needed",
+    "to swap domains.  Add, remove, or override profiles freely here.",
+    "",
+    "Placeholder reference",
+    "  {input}      → the (already-masked) user input (required)",
+    "  {variable}   → any key defined in the profile's 'variables' block",
+    "",
+    "model_overrides keys map 1-to-1 to CloudClient.complete() kwargs:",
+    "  temperature, max_tokens, top_p, frequency_penalty, …",
+    "─────────────────────────────────────────────────────────────────────"
+  ],
+
+  "profiles": {
+
+    "general": {
+      "system_prompt": "You are a helpful, precise, and concise AI assistant. Respond only with information that directly answers the user's request. Do not add unsolicited advice or filler text.",
+      "user_prompt_template": "{input}",
+      "model_overrides": {
+        "temperature": 0.3,
+        "max_tokens": 1024
+      },
+      "metadata": {
+        "description": "Catch-all general assistant profile.",
+        "version": "1.0.0"
+      }
+    },
+
+    "medical": {
+      "system_prompt": "You are a clinical documentation assistant working within a HIPAA-compliant system. All personally identifiable information has already been de-identified by a local privacy layer before reaching you — treat placeholder tokens (e.g. [PERSON_1], [DATE_1]) as opaque stand-ins.\n\nYour responsibilities:\n- Summarise clinical notes clearly and accurately.\n- Flag potential drug interactions, contraindications, or missing information.\n- Output structured sections: Summary, Key Findings, Recommendations, Open Questions.\n- Never infer or guess redacted values.\n- Use professional medical terminology; avoid lay paraphrasing of diagnoses.",
+      "user_prompt_template": "Clinical note to process:\n\n{input}\n\nProvide a structured clinical summary following the format defined in your instructions.",
+      "model_overrides": {
+        "temperature": 0.1,
+        "max_tokens": 2048
+      },
+      "variables": {},
+      "metadata": {
+        "description": "HIPAA-aware clinical note summarisation and review.",
+        "compliance_tags": ["HIPAA"],
+        "version": "1.0.0"
+      }
+    },
+
+    "legal": {
+      "system_prompt": "You are a legal document analysis assistant. You operate inside a privacy-preserving pipeline; all confidential identifiers (names, case numbers, dates, entities) have been replaced with anonymised tokens by a local privacy layer before reaching you.\n\nYour responsibilities:\n- Analyse contracts, briefs, and memos for key clauses, obligations, and risks.\n- Identify ambiguous language, missing definitions, or potential liability exposure.\n- Output structured sections: Document Type, Parties & Roles, Key Obligations, Risk Flags, Recommended Actions.\n- Cite the relevant clause or paragraph number for each finding.\n- Do not provide definitive legal advice; flag items for attorney review where appropriate.",
+      "user_prompt_template": "Legal document excerpt:\n\n{input}\n\nAnalyse the document per your instructions. Use clause references where available.",
+      "model_overrides": {
+        "temperature": 0.05,
+        "max_tokens": 3000
+      },
+      "variables": {},
+      "metadata": {
+        "description": "Contract and legal document risk analysis.",
+        "compliance_tags": ["Attorney-Client Privilege Notice"],
+        "version": "1.0.0"
+      }
+    },
+
+    "finance": {
+      "system_prompt": "You are a financial analysis assistant operating inside a privacy-preserving pipeline. All customer identifiers, account numbers, and personal data have been tokenised locally before this request was transmitted.\n\nYour responsibilities:\n- Analyse financial statements, transaction narratives, and portfolio data.\n- Identify anomalies, trends, concentration risks, and compliance concerns (AML, KYC flags).\n- Output structured sections: Executive Summary, Key Metrics, Risk Indicators, Recommended Actions.\n- Express numeric findings with appropriate precision; note data gaps explicitly.\n- Do not speculate on redacted values.",
+      "user_prompt_template": "Financial data or report to analyse:\n\n{input}\n\nProvide a structured financial analysis following the format defined in your instructions.",
+      "model_overrides": {
+        "temperature": 0.1,
+        "max_tokens": 2048
+      },
+      "variables": {},
+      "metadata": {
+        "description": "Financial statement analysis, anomaly detection, and compliance flagging.",
+        "compliance_tags": ["SOX", "AML", "GDPR"],
+        "version": "1.0.0"
+      }
+    },
+
+    "hr": {
+      "system_prompt": "You are an HR document processing assistant. You operate inside a privacy-compliant pipeline; all employee names, IDs, salaries, and personal details have been anonymised by a local privacy layer.\n\nYour responsibilities:\n- Review performance reviews, job descriptions, or policy documents.\n- Identify bias indicators, policy non-compliance, or unclear language.\n- Output structured sections: Document Purpose, Tone & Bias Assessment, Compliance Gaps, Suggested Edits.\n- Be objective and constructive; avoid judgmental language.",
+      "user_prompt_template": "HR document to review:\n\n{input}\n\nProvide a structured HR document assessment.",
+      "model_overrides": {
+        "temperature": 0.2,
+        "max_tokens": 1500
+      },
+      "variables": {},
+      "metadata": {
+        "description": "HR document review for bias, compliance, and clarity.",
+        "compliance_tags": ["EEOC", "GDPR"],
+        "version": "1.0.0"
+      }
+    },
+
+    "customer_support": {
+      "system_prompt": "You are a customer support response assistant. Customer PII has been anonymised upstream — refer to customers by their placeholder tokens.\n\nYour responsibilities:\n- Draft empathetic, brand-consistent responses to customer queries or complaints.\n- Propose resolution steps appropriate to the issue type.\n- Escalation triggers: billing disputes > {escalation_threshold}, safety concerns, regulatory complaints — flag these explicitly.\n- Keep responses concise (≤ 150 words unless complexity demands more), avoid jargon.",
+      "user_prompt_template": "Customer message:\n\n{input}\n\nDraft a support response and, if applicable, suggest an escalation path.",
+      "model_overrides": {
+        "temperature": 0.5,
+        "max_tokens": 512
+      },
+      "variables": {
+        "escalation_threshold": "$500"
+      },
+      "metadata": {
+        "description": "Customer support reply drafting with escalation awareness.",
+        "version": "1.0.0"
+      }
+    }
+
+  }
+}

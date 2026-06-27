@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Builder — Meta-Agent Factory</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',sans-serif;background:#fafaf9;background-image:linear-gradient(0deg,transparent 24%,#e5e5e4 25%,#e5e5e4 26%,transparent 27%,transparent 74%,#e5e5e4 75%,#e5e5e4 76%,transparent 77%),linear-gradient(90deg,transparent 24%,#e5e5e4 25%,#e5e5e4 26%,transparent 27%,transparent 74%,#e5e5e4 75%,#e5e5e4 76%,transparent 77%);background-size:40px 40px;min-height:100vh;padding:40px;}
+h1{font-size:2.5rem;font-weight:800;color:#1f2937;letter-spacing:-0.02em;}
+.subtitle{font-family:monospace;font-size:0.75rem;color:#06b6d4;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:40px;}
+.card{background:#fafaf9;border:1px solid #e5e5e4;padding:24px;margin-bottom:20px;position:relative;}
+.card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:linear-gradient(180deg,#06b6d4,#ec4899);}
+.label{font-family:monospace;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:#6b7280;margin-bottom:8px;display:block;}
+input,select,textarea{width:100%;background:#fff;border:1px solid #e5e5e4;padding:12px;font-size:0.95rem;color:#1f2937;margin-bottom:16px;outline:none;font-family:inherit;}
+input:focus,select:focus,textarea:focus{border-color:#06b6d4;}
+textarea{height:120px;resize:vertical;}
+.btn{background:#1f2937;color:#fff;border:none;padding:12px 28px;font-size:0.95rem;font-weight:600;cursor:pointer;font-family:inherit;}
+.btn:hover{background:#06b6d4;}
+.btn-secondary{background:#fff;color:#1f2937;border:1px solid #e5e5e4;margin-right:10px;}
+.btn-secondary:hover{border-color:#06b6d4;color:#06b6d4;}
+.nav{margin-bottom:40px;}
+.nav a{font-family:monospace;font-size:0.8rem;color:#06b6d4;text-decoration:none;margin-right:20px;}
+.steps{display:flex;gap:10px;margin-bottom:40px;}
+.step{font-family:monospace;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;padding:6px 14px;border:1px solid #e5e5e4;color:#6b7280;}
+.step.active{border-color:#06b6d4;color:#06b6d4;}
+.success{background:#f0fdf4;border:1px solid #06b6d4;padding:16px;margin-bottom:20px;font-family:monospace;font-size:0.85rem;color:#1f2937;}
+.error{background:#fef2f2;border:1px solid #ec4899;padding:16px;margin-bottom:20px;font-family:monospace;font-size:0.85rem;color:#ec4899;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+@media(max-width:600px){.grid{grid-template-columns:1fr;}.steps{flex-wrap:wrap;}}
+</style>
+</head>
+<body>
+<div class="nav">
+  <a href="/">← Dashboard</a>
+  <a href="/library">Library</a>
+</div>
+
+<h1>Agent Builder</h1>
+<p class="subtitle">Create and deploy agents</p>
+
+{% if success %}
+<div class="success">✓ Agent created successfully — ID: {{ success }}</div>
+{% endif %}
+{% if error %}
+<div class="error">✗ {{ error }}</div>
+{% endif %}
+
+<div class="steps">
+  <div class="step active">1. Configure</div>
+  <div class="step">2. Select Prompt</div>
+  <div class="step">3. Select Workflow</div>
+  <div class="step">4. Deploy</div>
+</div>
+
+<form method="post" action="/builder">
+  <div class="grid">
+    <div>
+      <div class="card">
+        <span class="label">Agent Name</span>
+        <input type="text" name="name" placeholder="e.g. Legal Contract Analyzer" required>
+        <span class="label">Agent Type</span>
+        <select name="type">
+          <option value="analyzer">Analyzer</option>
+          <option value="scraper">Scraper</option>
+          <option value="outreach">Outreach</option>
+          <option value="reviewer">Reviewer</option>
+          <option value="custom">Custom</option>
+        </select>
+        <span class="label">Guts ID</span>
+        <input type="text" name="guts_id" placeholder="e.g. guts_legal_v1" required>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <span class="label">Prompt Asset</span>
+        <select name="prompt_id">
+          {% for prompt in prompts %}
+          <option value="{{ prompt.id }}|{{ prompt.subcategory }}">{{ prompt.name }}</option>
+          {% endfor %}
+        </select>
+        <span class="label">Workflow</span>
+        <select name="workflow_id">
+          {% for workflow in workflows %}
+          <option value="{{ workflow.id }}|{{ workflow.subcategory }}">{{ workflow.name }}</option>
+          {% endfor %}
+        </select>
+        <span class="label">LLM Routing</span>
+        <select name="provider">
+          <option value="groq">Cloud (Groq)</option>
+          <option value="local">Local (Ollama)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <button type="submit" class="btn">Deploy Agent</button>
+</form>
+</body>
+</html>

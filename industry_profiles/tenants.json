@@ -1,0 +1,87 @@
+{
+  "_comment": [
+    "industry_profiles/tenants.json",
+    "─────────────────────────────────────────────────────────────────────",
+    "Tenant registry for the hybrid-privacy AI agent engine.",
+    "",
+    "Add a new tenant by adding a new key under 'tenants'.",
+    "No code changes or redeployment required.",
+    "",
+    "Fields",
+    "  profile        (required) : must match a key in prompts.json",
+    "  display_name   (optional) : human-readable label",
+    "  model_overrides(optional) : overrides the profile-level model settings",
+    "  active         (optional) : set false to disable a tenant instantly",
+    "  metadata       (optional) : arbitrary key-value store for your use",
+    "─────────────────────────────────────────────────────────────────────"
+  ],
+
+  "tenants": {
+
+    "clinic_nyc": {
+      "profile": "medical",
+      "display_name": "NYC Medical Clinic",
+      "active": true,
+      "model_overrides": {},
+      "metadata": {
+        "region": "us-east",
+        "compliance": ["HIPAA"]
+      }
+    },
+
+    "lawfirm_dallas": {
+      "profile": "legal",
+      "display_name": "Dallas Law Firm",
+      "active": true,
+      "model_overrides": {
+        "temperature": 0.05
+      },
+      "metadata": {
+        "region": "us-south",
+        "compliance": ["ABA"]
+      }
+    },
+
+    "hedgefund_001": {
+      "profile": "finance",
+      "display_name": "Hedge Fund Alpha",
+      "active": true,
+      "model_overrides": {
+        "max_tokens": 3000
+      },
+      "metadata": {
+        "region": "us-west",
+        "compliance": ["SOX", "AML"]
+      }
+    },
+
+    "support_team_a": {
+      "profile": "customer_support",
+      "display_name": "Support Team A",
+      "active": true,
+      "model_overrides": {},
+      "metadata": {}
+    },
+
+    "demo_tenant": {
+      "profile": "general",
+      "display_name": "Demo / Sandbox",
+      "active": true,
+      "model_overrides": {},
+      "metadata": {
+        "note": "Safe sandbox for testing — uses the general profile"
+      }
+    },
+
+    "inactive_example": {
+      "profile": "finance",
+      "display_name": "Offboarded Client",
+      "active": false,
+      "model_overrides": {},
+      "metadata": {
+        "note": "Set active=false to block a tenant without deleting their config"
+      }
+    }
+
+  }
+}

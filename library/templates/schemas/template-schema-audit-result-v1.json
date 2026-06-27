@@ -1,0 +1,22 @@
+{
+  "id": "template-schema-audit-result-v1",
+  "type": "template",
+  "category": "templates",
+  "subcategory": "schemas",
+  "name": "Audit Result Schema",
+  "version": "1.0.0",
+  "purpose": "Structured output for audit results.",
+  "fields": {
+    "summary": "string",
+    "findings": "array",
+    "severity": "string",
+    "recommended_actions": "array",
+    "confidence": "number"
+  },
+  "tags": [
+    "schema",
+    "audit",
+    "json"
+  ],
+  "status": "draft"
+}

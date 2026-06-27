@@ -1,0 +1,13 @@
+{
+  "id": "prompt-analyze-market-position-v1",
+  "type": "prompt",
+  "category": "prompts",
+  "subcategory": "analysis",
+  "name": "Analyze Market Position",
+  "version": "1.0.0",
+  "purpose": "Analyze a business, offer, or brand position and identify strengths, weaknesses, risks, and opportunities.",
+  "inputs": ["business_summary", "offer_summary", "target_audience", "market_context"],
+  "output_format": "structured_sections",
+  "tags": ["analysis", "positioning", "marketing", "strategy"],
+  "status": "draft"
+}

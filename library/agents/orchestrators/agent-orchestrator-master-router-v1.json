@@ -1,0 +1,28 @@
+{
+  "id": "agent-orchestrator-master-router-v1",
+  "type": "agent",
+  "category": "agents",
+  "subcategory": "orchestrators",
+  "name": "Master Router",
+  "version": "1.0.0",
+  "role": "Classify incoming work and assign the correct workflow and specialist.",
+  "allowed_workflows": [
+    "workflow-routing-task-dispatch-v1"
+  ],
+  "allowed_prompt_categories": [
+    "analysis",
+    "extraction",
+    "evaluation"
+  ],
+  "handoff_targets": [
+    "specialists",
+    "reviewers",
+    "safety"
+  ],
+  "tags": [
+    "router",
+    "orchestration",
+    "control-layer"
+  ],
+  "status": "draft"
+}
